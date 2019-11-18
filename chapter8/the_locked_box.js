@@ -14,14 +14,16 @@ const box = {
 };
 
 function withBoxUnlocked(body) {
-  let action = !box.locked ? box.unlock : box.lock;
+  let alreadyUnlocked = !box.locked;
 
-  action();
+  box.unlock();
 
   try {
     body();
   } finally {
-    action();
+    if (!alreadyUnlocked) {
+      box.lock();
+    }
     return;
   }
 }
